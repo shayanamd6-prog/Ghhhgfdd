@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fibr Video</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Tahoma,Arial;
+background:#050914;
+color:#fff
+}
+
+header{
+background:#08111f;
+border-bottom:1px solid #193451;
+padding:15px
+}
+
+.nav{
+max-width:1100px;
+margin:auto;
+display:flex;
+align-items:center;
+gap:10px
+}
+
+.logo{
+font-size:26px;
+font-weight:900
+}
+
+.logo span{color:#39a9ff}
+
+.spacer{flex:1}
+
+button{
+font-family:inherit;
+cursor:pointer;
+border:0
+}
+
+.btn{
+background:#0984ed;
+color:#fff;
+padding:11px 16px;
+border-radius:11px;
+font-weight:bold
+}
+
+.ghost{
+background:#101d2e;
+border:1px solid #29435f;
+color:#fff
+}
+
+main{
+max-width:1100px;
+margin:auto;
+padding:25px 15px 60px
+}
+
+.hero{padding:25px 0}
+
+.hero h1{
+font-size:45px;
+margin:0 0 10px
+}
+
+.hero h1 span{color:#45adff}
+
+.muted{
+color:#91a2b8;
+font-size:13px
+}
+
+.search{
+display:flex;
+gap:10px;
+margin:25px 0
+}
+
+.search input{
+flex:1;
+padding:14px;
+background:#091523;
+border:1px solid #213c5a;
+border-radius:12px;
+color:#fff;
+outline:none
+}
+
+.chips{
+display:flex;
+gap:8px;
+flex-wrap:wrap
+}
+
+.chip{
+padding:9px 14px;
+border-radius:20px;
+background:#0d1b2b;
+border:1px solid #27405e;
+color:#fff
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+gap:16px
+}
+
+.card{
+background:#0b1522;
+border:1px solid #1b3048;
+border-radius:16px;
+overflow:hidden
+}
+
+.poster{
+height:285px;
+background:#09111d
+}
+
+.poster img{
+width:100%;
+height:100%;
+object-fit:cover
+}
+
+.info{padding:13px}
+
+.info h3{
+margin:0 0 7px
+}
+
+.stats{
+color:#9cafc4;
+font-size:12px;
+margin-top:8px
+}
+
+.actions{
+display:flex;
+gap:8px;
+margin-top:13px
+}
+
+.actions button{
+flex:1
+}
+
+.admin{
+margin:20px 0;
+padding:17px;
+border:1px solid #1d659e;
+border-radius:15px;
+background:#071827
+}
+
+.admin-item{
+display:flex;
+align-items:center;
+gap:10px;
+padding:10px;
+margin-top:10px;
+background:#09121f;
+border:1px solid #1c3048;
+border-radius:10px
+}
+
+.thumb{
+width:50px;
+height:65px;
+object-fit:cover;
+border-radius:7px
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:#000c;
+display:none;
+align-items:center;
+justify-content:center;
+padding:15px;
+z-index:100
+}
+
+.modal.show{display:flex}
+
+.box{
+width:min(650px,100%);
+max-height:90vh;
+overflow:auto;
+background:#091522;
+border:1px solid #284968;
+border-radius:18px;
+padding:20px
+}
+
+.close{
+float:left;
+background:none;
+color:#aaa;
+font-size:27px
+}
+
+.field{margin:12px 0}
+
+.field label{
+display:block;
+font-size:13px;
+color:#a9bad0;
+margin-bottom:6px
+}
+
+.field input,
+.field textarea{
+width:100%;
+padding:12px;
+background:#06101b;
+border:1px solid #28415d;
+border-radius:10px;
+color:white;
+outline:none
+}
+
+.field textarea{min-height:90px}
+
+.code{
+font-size:30px;
+letter-spacing:8px;
+text-align:center;
+background:#06101b;
+border:1px solid #2b6da0;
+padding:15px;
+border-radius:12px;
+color:#42adff;
+font-weight:bold;
+margin:15px 0
+}
+
+.video{
+width:100%;
+background:#000;
+border-radius:12px
+}
+
+.stars{
+display:flex;
+direction:ltr;
+gap:4px
+}
+
+.star{
+background:none;
+font-size:30px;
+color:#586576;
+padding:0
+}
+
+.star.selected{color:#ffd21f}
+
+.comment{
+background:#06101b;
+border:1px solid #1c3047;
+padding:10px;
+border-radius:10px;
+margin-top:8px
+}
+
+.comment b{color:#45adff}
+
+.gift{
+margin-top:18px;
+padding:15px;
+border-radius:13px;
+background:#21152e;
+border:1px solid #704394
+}
+
+.empty{
+padding:40px;
+text-align:center;
+color:#8da0b8
+}
+
+.footer{
+text-align:center;
+padding:25px;
+border-top:1px solid #162b43;
+color:#70839b
+}
+
+@media(max-width:600px){
+.hero h1{font-size:34px}
+.grid{grid-template-columns:repeat(2,1fr);gap:9px}
+.poster{height:230px}
+.actions{flex-direction:column}
+.search{flex-direction:column}
+.admin-item{flex-wrap:wrap}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="nav">
+<div class="logo">Fibr <span>Video</span></div>
+<div class="spacer"></div>
+<div id="account"></div>
+</div>
+</header>
+
+<main>
+<section class="hero">
+<h1>سینمای <span>Fibr Video</span></h1>
+<p class="muted">فیلم‌های دوبله‌شده را با یک تجربه مدرن تماشا کن.</p>
+<div class="search">
+<input id="search" placeholder="نام فیلم، ژانر یا سال...">
+<button id="searchBtn" class="btn">جستجو</button>
+</div>
+<div class="chips">
+<button class="chip" data-cat="همه">همه</button>
+<button class="chip" data-cat="اکشن">اکشن</button>
+<button class="chip" data-cat="درام">درام</button>
+<button class="chip" data-cat="کمدی">کمدی</button>
+<button class="chip" data-cat="علمی‌تخیلی">علمی‌تخیلی</button>
+</div>
+</section>
+
+<div id="admin" class="admin" style="display:none"></div>
+
+<h2>فیلم‌های دوبله‌شده</h2>
+<div id="movies" class="grid"></div>
+</main>
+
+<footer class="footer">© 2026 Fibr Video</footer>
+
+<!-- LOGIN -->
+<div id="loginModal" class="modal">
+<div class="box">
+<button class="close" data-close="loginModal">×</button>
+<h2>ورود به Fibr Video</h2>
+<div id="phoneStep">
+<div class="field">
+<label>شماره موبایل</label>
+<input id="phone" inputmode="numeric" maxlength="11" placeholder="09123456789">
+</div>
+<button id="sendCode" class="btn">ارسال کد</button>
+</div>
+<div id="codeStep" style="display:none">
+<p class="muted">کد ورود مخصوص این شماره:</p>
+<div id="showCode" class="code">000000</div>
+<div class="field">
+<label>کد را وارد کن</label>
+<input id="codeInput" inputmode="numeric" maxlength="6">
+</div>
+<button id="verifyCode" class="btn">تأیید کد</button>
+</div>
+<div id="nameStep" style="display:none">
+<div class="field">
+<label>اسم شما</label>
+<input id="userName" placeholder="مثلاً شایان">
+</div>
+<button id="createAccount" class="btn">ساخت حساب</button>
+</div>
+</div>
+</div>
+
+<!-- MOVIE -->
+<div id="movieModal" class="modal">
+<div class="box">
+<button class="close" data-close="movieModal">×</button>
+<div id="movieContent"></div>
+</div>
+</div>
+
+<!-- EDIT -->
+<div id="editModal" class="modal">
+<div class="box">
+<button class="close" data-close="editModal">×</button>
+<h2 id="editTitle">افزودن فیلم</h2>
+<input type="hidden" id="editId">
+<div class="field">
+<label>نام فیلم</label>
+<input id="mTitle">
+</div>
+<div class="field">
+<label>ژانر</label>
+<input id="mGenre" placeholder="اکشن">
+</div>
+<div class="field">
+<label>سال</label>
+<input id="mYear">
+</div>
+<div class="field">
+<label>لینک پوستر</label>
+<input id="mPoster">
+</div>
+<div class="field">
+<label>لینک فیلم</label>
+<input id="mVideo">
+</div>
+<div class="field">
+<label>توضیحات</label>
+<textarea id="mDesc"></textarea>
+</div>
+<div class="gift">
+<h3>🎁 هدیه</h3>
+<div class="field">
+<label>نام هدیه</label>
+<input id="giftTitle">
+</div>
+<div class="field">
+<label>لینک فیلم هدیه</label>
+<input id="giftVideo">
+</div>
+</div>
+<br>
+<button id="saveMovie" class="btn">ذخیره فیلم</button>
+</div>
+</div>
+
+<script>
+var ADMIN="09150026844";
+var BIN_ID="6a95f425f5f4af5e2959ae4a";
+var category="همه";
+var currentUser=null;
+var loginCode="";
+var movies=[];
+
+try{
+currentUser=JSON.parse(localStorage.getItem("fibrUser")||"null");
+}catch(e){
+currentUser=null;
+}
+
+function fetchMovies(){
+fetch("https://api.jsonbin.io/v3/b/" + BIN_ID + "/latest")
+.then(function(res){ return res.json(); })
+.then(function(data){
+if(data && data.record && Array.isArray(data.record)){
+movies=data.record;
+} else {
+movies=[
+{
+id:1,
+title:"نمونه فیلم",
+genre:"اکشن",
+year:"2026",
+poster:"https://images.unsplash.com/photo-1485846234645-a62644f84728?w=700",
+video:"",
+description:"این یک فیلم نمونه است.",
+views:0,
+rating:0,
+ratingCount:0,
+comments:[],
+giftTitle:"",
+giftVideo:""
+}
+];
+saveMoviesCloud();
+}
+renderMovies();
+renderAdmin();
+})
+.catch(function(err){
+movies=[
+{
+id:1,
+title:"نمونه فیلم",
+genre:"اکشن",
+year:"2026",
+poster:"https://images.unsplash.com/photo-1485846234645-a62644f84728?w=700",
+video:"",
+description:"این یک فیلم نمونه است.",
+views:0,
+rating:0,
+ratingCount:0,
+comments:[],
+giftTitle:"",
+giftVideo:""
+}
+];
+renderMovies();
+renderAdmin();
+});
+}
+
+function saveMoviesCloud(){
+fetch("https://api.jsonbin.io/v3/b/" + BIN_ID, {
+method: "PUT",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify(movies)
+}).then(function(){
+renderMovies();
+renderAdmin();
+});
+}
+
+function openModal(id){
+document.getElementById(id).classList.add("show");
+}
+
+function closeModal(id){
+document.getElementById(id).classList.remove("show");
+}
+
+function safe(text){
+return String(text||"").replace(/[&<>"']/g,function(c){
+return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c];
+});
+}
+
+/* حساب */
+function renderAccount(){
+var box=document.getElementById("account");
+if(!currentUser){
+box.innerHTML='<button id="loginBtn" class="btn ghost">ورود / ساخت حساب</button>';
+document.getElementById("loginBtn").onclick=function(){
+openModal("loginModal");
+};
+return;
+}
+box.innerHTML='<button id="logoutBtn" class="btn ghost">👤 '+safe(currentUser.name)+' | خروج</button>';
+document.getElementById("logoutBtn").onclick=function(){
+currentUser=null;
+localStorage.removeItem("fibrUser");
+renderAccount();
+renderAdmin();
+alert("از حساب خارج شدی.");
+};
+}
+
+/* ارسال کد */
+document.getElementById("sendCode").addEventListener("click",function(){
+var phone=document.getElementById("phone").value.replace(/\D/g,"");
+if(!/^09\d{9}$/.test(phone)){
+alert("شماره موبایل باید ۱۱ رقم و با 09 شروع شود.");
+return;
+}
+loginCode=String(Math.floor(100000+Math.random()*900000));
+document.getElementById("showCode").textContent=loginCode;
+document.getElementById("phoneStep").style.display="none";
+document.getElementById("codeStep").style.display="block";
+});
+
+/* تأیید کد */
+document.getElementById("verifyCode").addEventListener("click",function(){
+var entered=document.getElementById("codeInput").value.trim();
+if(entered!==loginCode){
+alert("کد وارد شده اشتباه است.");
+return;
+}
+document.getElementById("codeStep").style.display="none";
+document.getElementById("nameStep").style.display="block";
+});
+
+/* ساخت حساب */
+document.getElementById("createAccount").addEventListener("click",function(){
+var phone=document.getElementById("phone").value.replace(/\D/g,"");
+var name=document.getElementById("userName").value.trim();
+if(!name){
+alert("اسم خودت را وارد کن.");
+return;
+}
+currentUser={phone:phone, name:name};
+localStorage.setItem("fibrUser",JSON.stringify(currentUser));
+document.getElementById("phone").value="";
+document.getElementById("codeInput").value="";
+document.getElementById("userName").value="";
+document.getElementById("phoneStep").style.display="block";
+document.getElementById("codeStep").style.display="none";
+document.getElementById("nameStep").style.display="none";
+closeModal("loginModal");
+renderAccount();
+renderAdmin();
+if(phone===ADMIN){
+alert("👑 خوش آمدی مدیر Fibr Video");
+}else{
+alert("حساب ساخته شد ✅");
+}
+});
+
+/* فیلم‌ها */
+function renderMovies(){
+var search=document.getElementById("search").value.toLowerCase().trim();
+var result=movies.filter(function(m){
+var categoryOK=category==="همه" || m.genre===category;
+var text=(m.title+" "+m.genre+" "+m.year).toLowerCase();
+return categoryOK && text.indexOf(search)!==-1;
+});
+
+var box=document.getElementById("movies");
+if(result.length===0){
+box.innerHTML='<div class="empty">فیلمی پیدا نشد.</div>';
+return;
+}
+
+box.innerHTML="";
+result.forEach(function(m){
+var average=m.ratingCount?(m.rating/m.ratingCount).toFixed(1):"—";
+var card=document.createElement("article");
+card.className="card";
+card.innerHTML=
+'<div class="poster"><img src="'+safe(m.poster)+'"></div>'+
+'<div class="info">'+
+'<h3>'+safe(m.title)+'</h3>'+
+'<div class="muted">'+safe(m.genre)+' • '+safe(m.year)+'</div>'+
+'<div class="stats">👁 '+(m.views||0)+' &nbsp; ⭐ '+average+' &nbsp; 💬 '+(m.comments||[]).length+'</div>'+
+'<div class="actions">'+
+'<button class="btn watch">▶ تماشا</button>'+
+'<button class="btn ghost fav">♡</button>'+
+'</div>'+
+'</div>';
+
+card.querySelector(".watch").onclick=function(){
+watchMovie(m.id);
+};
+card.querySelector(".fav").onclick=function(){
+alert("به علاقه‌مندی‌ها اضافه شد ❤️");
+};
+box.appendChild(card);
+});
+}
+
+/* تماشای فیلم */
+function watchMovie(id){
+var m=movies.find(function(x){ return x.id===id; });
+if(!m)return;
+
+m.views=(m.views||0)+1;
+saveMoviesCloud();
+
+var average=m.ratingCount?(m.rating/m.ratingCount).toFixed(1):"—";
+var html=
+'<h2>'+safe(m.title)+'</h2>'+
+'<p class="muted">'+safe(m.genre)+' • '+safe(m.year)+' • 👁 '+m.views+' • ⭐ '+average+'</p>';
+
+if(m.video){
+html+='<video class="video" controls playsinline src="'+safe(m.video)+'"></video>';
+}else{
+html+='<div class="empty">لینک فیلم ثبت نشده است.</div>';
+}
+
+html+='<p style="line-height:2">'+safe(m.description)+'</p>'+
+'<hr style="border-color:#19304b">'+
+'<h3>⭐ امتیاز بده</h3>'+
+'<div class="stars">';
+for(var i=1;i<=5;i++){
+html+='<button class="star" data-rate="'+i+'">★</button>';
+}
+html+='</div>'+
+'<div class="field"><label>نظر شما</label><textarea id="commentText" placeholder="نظرت درباره فیلم..."></textarea></div>'+
+'<button id="commentBtn" class="btn">ثبت نظر</button>'+
+'<h3>💬 نظرات</h3>';
+
+if(!m.comments || !m.comments.length){
+html+='<p class="muted">هنوز نظری ثبت نشده است.</p>';
+}else{
+m.comments.forEach(function(c){
+html+='<div class="comment"><b>'+safe(c.name)+'</b><div class="muted">⭐ '+(c.rating||0)+'</div><p>'+safe(c.text)+'</p></div>';
+});
+}
+
+if(m.giftVideo){
+html+='<div class="gift"><h3>🎁 '+safe(m.giftTitle||"هدیه ویژه")+'</h3><video class="video" controls playsinline src="'+safe(m.giftVideo)+'"></video></div>';
+}
+
+document.getElementById("movieContent").innerHTML=html;
+
+var selectedRating=0;
+document.querySelectorAll(".star").forEach(function(star){
+star.onclick=function(){
+selectedRating=Number(this.dataset.rate);
+document.querySelectorAll(".star").forEach(function(s){
+s.classList.toggle("selected",Number(s.dataset.rate)<=selectedRating);
+});
+};
+});
+
+document.getElementById("commentBtn").onclick=function(){
+if(!currentUser){
+alert("برای کامنت باید حساب داشته باشی.");
+return;
+}
+var text=document.getElementById("commentText").value.trim();
+if(!text){
+alert("نظر خودت را بنویس.");
+return;
+}
+m.comments=m.comments||[];
+m.comments.unshift({name:currentUser.name, text:text, rating:selectedRating});
+if(selectedRating>0){
+m.rating=(m.rating||0)+selectedRating;
+m.ratingCount=(m.ratingCount||0)+1;
+}
+saveMoviesCloud();
+watchMovie(id);
+};
+
+openModal("movieModal");
+}
+
+/* پنل مدیریت */
+function renderAdmin(){
+var box=document.getElementById("admin");
+if(!currentUser || currentUser.phone!==ADMIN){
+box.style.display="none";
+return;
+}
+box.style.display="block";
+box.innerHTML=
+'<div style="display:flex;align-items:center;gap:10px"><h2>⚙️ پنل مدیریت</h2><div class="spacer"></div><button id="addMovie" class="btn">＋ افزودن فیلم</button></div>'+
+'<div id="adminList"></div>';
+
+document.getElementById("addMovie").onclick=function(){
+openEditor();
+};
+
+var list=document.getElementById("adminList");
+movies.forEach(function(m){
+var item=document.createElement("div");
+item.className="admin-item";
+item.innerHTML=
+'<img class="thumb" src="'+safe(m.poster)+'">'+
+'<div class="spacer"><b>'+safe(m.title)+'</b><div class="muted">'+safe(m.genre)+' • '+safe(m.year)+'</div></div>'+
+'<button class="btn ghost edit">ویرایش</button>'+
+'<button class="btn ghost del">حذف</button>';
+
+item.querySelector(".edit").onclick=function(){
+openEditor(m.id);
+};
+item.querySelector(".del").onclick=function(){
+if(confirm("فیلم حذف شود؟")){
+movies=movies.filter(function(x){ return x.id!==m.id; });
+saveMoviesCloud();
+}
+};
+list.appendChild(item);
+});
+}
+
+/* ویرایش */
+function openEditor(id){
+if(!currentUser || currentUser.phone!==ADMIN){
+alert("دسترسی فقط برای مدیر است.");
+return;
+}
+var m;
+if(id){
+m=movies.find(function(x){ return x.id===id; });
+}else{
+m={id:"", title:"", genre:"اکشن", year:"2026", poster:"", video:"", description:"", views:0, rating:0, ratingCount:0, comments:[], giftTitle:"", giftVideo:""};
+}
+
+document.getElementById("editTitle").textContent=id ? "ویرایش فیلم" : "افزودن فیلم";
+document.getElementById("editId").value=m.id;
+document.getElementById("mTitle").value=m.title;
+document.getElementById("mGenre").value=m.genre;
+document.getElementById("mYear").value=m.year;
+document.getElementById("mPoster").value=m.poster;
+document.getElementById("mVideo").value=m.video;
+document.getElementById("mDesc").value=m.description||"";
+document.getElementById("giftTitle").value=m.giftTitle||"";
+document.getElementById("giftVideo").value=m.giftVideo||"";
+
+openModal("editModal");
+}
+
+/* ذخیره فیلم */
+document.getElementById("saveMovie").onclick=function(){
+if(!currentUser || currentUser.phone!==ADMIN){
+alert("دسترسی ندارید.");
+return;
+}
+var title=document.getElementById("mTitle").value.trim();
+if(!title){
+alert("نام فیلم را وارد کن.");
+return;
+}
+var id=document.getElementById("editId").value;
+var movie={
+id:id ? Number(id) : Date.now(),
+title:title,
+genre:document.getElementById("mGenre").value.trim(),
+year:document.getElementById("mYear").value.trim(),
+poster:document.getElementById("mPoster").value.trim(),
+video:document.getElementById("mVideo").value.trim(),
+description:document.getElementById("mDesc").value.trim(),
+giftTitle:document.getElementById("giftTitle").value.trim(),
+giftVideo:document.getElementById("giftVideo").value.trim(),
+views:0,
+rating:0,
+ratingCount:0,
+comments:[]
+};
+
+if(id){
+var old=movies.find(function(x){ return x.id===Number(id); });
+if(old){
+movie.views=old.views||0;
+movie.rating=old.rating||0;
+movie.ratingCount=old.ratingCount||0;
+movie.comments=old.comments||[];
+}
+movies=movies.map(function(x){ return x.id===Number(id) ? movie : x; });
+}else{
+movies.unshift(movie);
+}
+
+saveMoviesCloud();
+closeModal("editModal");
+alert("فیلم ذخیره و روی سرور ثبت شد ✅");
+};
+
+/* جستجو */
+document.getElementById("search").addEventListener("input",renderMovies);
+document.getElementById("searchBtn").addEventListener("click",renderMovies);
+
+/* دسته‌بندی */
+document.querySelectorAll(".chip").forEach(function(btn){
+btn.addEventListener("click",function(){
+category=this.dataset.cat;
+renderMovies();
+});
+});
+
+/* بستن پنجره‌ها */
+document.querySelectorAll(".close").forEach(function(btn){
+btn.addEventListener("click",function(){
+closeModal(this.dataset.close);
+});
+});
+document.querySelectorAll(".modal").forEach(function(modal){
+modal.addEventListener("click",function(e){
+if(e.target===modal){
+modal.classList.remove("show");
+}
+});
+});
+
+/* اجرا */
+renderAccount();
+fetchMovies();
+</script>
+
+</body>
+  </html>
+
